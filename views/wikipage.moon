@@ -13,6 +13,7 @@ class New extends require "widgets.base"
               return
 
 
-          for revision in *revisions
-              div contenteditable: 'true', revision.content
+          for revision in *@revisions
+              div contenteditable: 'true', ->
+                raw revision.content
               return

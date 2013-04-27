@@ -29,6 +29,7 @@ make_schema = ->
     {"id", serial}
     {"wiki_page_id", foreign_key}
     {"content", text}
+    {"creator_ip", varchar}
     {"created_at", time}
     {"updated_at", time}
 
@@ -37,13 +38,13 @@ make_schema = ->
 
   create_index "revisions", "wiki_page_id"
 
-  destroy_schema = ->
+destroy_schema = ->
     tbls = {
-      "wiki_pages", "revisions"
+        "wiki_pages", "revisions"
     }
 
     for t in *tbls
-      drop_table t
+        drop_table t
 
 
 

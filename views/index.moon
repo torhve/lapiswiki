@@ -29,6 +29,3 @@ Det finnes mange ulike varianter av Lorem Ipsum, men majoriteten av disse har bl
     lister
 Begynn med 'Lorem ipsum dolor sit amet...'
 ]] 
-        div class: "actions", ->
-            a href: '#', class: 'button primary', ->
-                text 'Save'

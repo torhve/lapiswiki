@@ -23,15 +23,25 @@ class extends lapis.Application
         @pages = WikiPages\select "order by slug asc"
         render: true
 
-    [wikipage: "/wiki/:slug"]: capture_errors =>
-
-        @page = assert_error WikiPages\find(slug: @params.slug)
+    [wikipage: "/wiki/:slug"]: respond_to {
+      GET: =>
+        @page = assert WikiPages\find(slug: @params.slug), 'No page found'
         @page_description = @page.slug
         @page_title = @page.slug
 
-        @revisions = Revisions\select "where wiki_page_id = ? order by updated_at", @page.id
+        @revisions = assert_error Revisions\select "where wiki_page_id = ? order by updated_at desc", @page.id
 
         render: true
+
+      POST: capture_errors =>
+        @page = assert_error WikiPages\find(slug: @params.slug)
+        assert_valid @params, {
+            { 'content', exists: true, min_length: 1 }
+        }
+        {:content } = @params
+        ip = ngx.var.remote_addr
+        revision = assert_error Revisions\create @page, content, ip
+    }
 
     [new: "/new"]: respond_to {
       before: =>
@@ -55,6 +65,11 @@ class extends lapis.Application
     "/db/make": =>
         schema = require "schema"
         schema.make_schema!
+        json: { status: "ok" }
+
+    "/db/nuke": =>
+        schema = require "schema"
+        schema.destroy_schema!
         json: { status: "ok" }
 
     "/console": console.make!

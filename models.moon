@@ -25,12 +25,12 @@ class WikiPages extends Model
 class Revisions extends Model
   @timestamp: true
 
-  @create: (page, revision) =>
+  @create: (page, content, ip) =>
 
     Model.create @, {
-      page_id: page.id
-      content: revision.content
-      creator_ip: revision.ip
+      wiki_page_id: page.id
+      content: content
+      creator_ip: ip
     }
 
 {
