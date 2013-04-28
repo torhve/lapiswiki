@@ -37,7 +37,7 @@ CKEDITOR.editorConfig = function( config ) {
 	config.removeDialogTabs = 'image:advanced;link:advanced';
 
     // Extra plugins
-    config.extraPlugins = 'imagepaste,ajaxsave,maximize,insertpre,syntaxhighlight';
+    config.extraPlugins = 'imagepaste,ajaxsave,maximize,syntaxhighlight';
 
     config.filebrowserBrowseUrl = '/browser/';
 
