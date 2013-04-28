@@ -3,12 +3,21 @@ db = require "lapis.nginx.postgres"
 lapis = require "lapis.init"
 csrf = require "lapis.csrf"
 console = require "lapis.console"
+html = require "lapis.html"
+io = require "io"
 
 import respond_to, capture_errors, assert_error, yield_error from require "lapis.application"
 import validate, assert_valid from require "lapis.validate"
 import escape_pattern, trim_filter, slugify from require "lapis.util"
 
 import WikiPages, Revisions from require "models"
+
+secure_filename = (filename) ->
+    filename = string.gsub(filename, '/', '')
+    filename = string.gsub(filename, '%.%.', '')
+    -- Filenames with spaces are just a hassle
+    filename = string.gsub(filename, ' ', '_')
+    filename
 
 class extends lapis.Application
     layout: require "views.layout"
@@ -72,6 +81,32 @@ class extends lapis.Application
             redirect_to: @url_for("wikipage", slug:@titlematches[1].slug)
         else
             render: true
+
+    [upload: "/upload/"]: respond_to {
+      GET: =>
+        render: false
+
+      POST: =>
+        csrf.assert_token @
+        assert_valid @params, {
+            {'upload', file_exists: true}
+        }
+        file = @params.upload
+        content = file.content
+        filename = secure_filename file.filename
+        fileurl = 'static/uploads/'..filename
+        diskfile = io.open fileurl, 'w'
+        diskfile\write file.content
+        diskfile\close
+
+        {:type, :CKEditorFuncNum } = @params
+        message = '' -- XXX add lots of error checking
+        url = '/' .. fileurl
+
+        res = "<script type='text/javascript'>window.parent.CKEDITOR.tools.callFunction(#{CKEditorFuncNum}, '#{url}', '#{message}');</script>"
+        print res
+        @write res
+    }
 
     --"/db/make": =>
     --    schema = require "schema"
