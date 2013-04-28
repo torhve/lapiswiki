@@ -3,8 +3,9 @@ import Widget from require "lapis.html"
 class New extends require "widgets.base"
     content: =>
         div class: "body", ->
-          h2 @page.slug
+          h2 class:"left", @page.slug
           small class:"right", @page.updated_at
+          raw '<hr>'
 
           @render_errors!
 
