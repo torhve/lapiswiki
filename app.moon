@@ -62,15 +62,26 @@ class extends lapis.Application
         redirect_to: @url_for("wikipage", slug:slugify slug)
     }
 
-    "/db/make": =>
-        schema = require "schema"
-        schema.make_schema!
-        json: { status: "ok" }
+    [search: "/search"]: capture_errors =>
+        {:q} = @params
+        @page_title = 'Search for ' .. q
+        @query = q
+        res = db.query "SELECT * FROM wiki_pages WHERE to_tsvector(slug) @@ to_tsquery(?)", q
+        @titlematches = res['resultset']
+        if #@titlematches == 1
+            redirect_to: @url_for("wikipage", slug:@titlematches[1].slug)
+        else
+            render: true
 
-    "/db/nuke": =>
-        schema = require "schema"
-        schema.destroy_schema!
-        json: { status: "ok" }
+    --"/db/make": =>
+    --    schema = require "schema"
+    --    schema.make_schema!
+    --    json: { status: "ok" }
+
+    --"/db/nuke": =>
+    --    schema = require "schema"
+    --    schema.destroy_schema!
+    --    json: { status: "ok" }
 
     "/console": console.make!
 

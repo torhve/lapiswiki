@@ -39,12 +39,12 @@ class Layout extends Widget
             section class: "top-bar-section", ->
                 ul class:"right", ->
                     li class:"has-form", ->
-                        form ->
+                        form action:"/search", method:"get", ->
                             div class:"row collapse", ->
                                 div class:"small-8 columns", ->
-                                    input type:"text", ->
+                                    input name:"q", type:"text", ->
                                 div class:"small-4 columns", ->
-                                    a href:"#", class:"alert button", 'Search'
+                                    input type:"submit", class:"alert button",value:'Search'
 
                     li class:"divider"
                     li class:"", ->
