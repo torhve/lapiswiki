@@ -5,6 +5,7 @@ csrf = require "lapis.csrf"
 console = require "lapis.console"
 html = require "lapis.html"
 io = require "io"
+os = require "os"
 
 import respond_to, capture_errors, assert_error, yield_error from require "lapis.application"
 import validate, assert_valid from require "lapis.validate"
@@ -93,8 +94,9 @@ class extends lapis.Application
         }
         file = @params.upload
         content = file.content
+        timestamp = ngx.now!
         filename = secure_filename file.filename
-        fileurl = 'static/uploads/'..filename
+        fileurl = 'static/uploads/'..timestamp..'_'..filename
         diskfile = io.open fileurl, 'w'
         diskfile\write file.content
         diskfile\close
