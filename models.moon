@@ -1,7 +1,6 @@
 db = require "lapis.db"
 
 import Model from require "lapis.db.model"
-import slugify from require "lapis.util"
 
 local *
 
@@ -9,8 +8,6 @@ class WikiPages extends Model
   @timestamp: true
 
   @create: (slug) =>
-
-    slug = slugify slug
 
     --if @check_unique_constraint 'slug', slug
     --  return nil, "Page already exists"

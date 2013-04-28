@@ -36,7 +36,7 @@ CKEDITOR.on( 'instanceCreated', function( event ) {
 /*
 CKEDITOR.on( 'instanceReady', function( event ) {
     editor = event.editor;
-    periodicData();
+   $('pre').each(function(i, e) {hljs.highlightBlock(e)});
 });
 CKEDITOR.on( 'blur', function( event ) {
     var editor = event.editor;

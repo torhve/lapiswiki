@@ -72,3 +72,4 @@ class Layout extends Widget
 
               a href: @url_for("index"), "Home"
               raw " &middot; "
+

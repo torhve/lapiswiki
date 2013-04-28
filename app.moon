@@ -9,7 +9,7 @@ os = require "os"
 
 import respond_to, capture_errors, assert_error, yield_error from require "lapis.application"
 import validate, assert_valid from require "lapis.validate"
-import escape_pattern, trim_filter, slugify from require "lapis.util"
+import escape_pattern, trim_filter from require "lapis.util"
 
 import WikiPages, Revisions from require "models"
 
@@ -19,6 +19,9 @@ secure_filename = (filename) ->
     -- Filenames with spaces are just a hassle
     filename = string.gsub(filename, ' ', '_')
     filename
+
+slugify = (str) ->
+    (str\gsub("%s+", "-")\gsub("[^%w%-_]+", ""))
 
 class extends lapis.Application
     layout: require "views.layout"
@@ -68,15 +71,17 @@ class extends lapis.Application
             { 'slug', exists: true, min_length: 3, max_length: 75 }
         }
         {:slug } = @params
+        slug = slugify slug
         page = assert_error WikiPages\create slug
-        redirect_to: @url_for("wikipage", slug:slugify slug)
+        redirect_to: @url_for("wikipage", slug: slug)
     }
 
     [search: "/search"]: capture_errors =>
         {:q} = @params
         @page_title = 'Search for ' .. q
         @query = q
-        res = db.query "SELECT * FROM wiki_pages WHERE to_tsvector(slug) @@ to_tsquery(?)", q
+        res = db.query "SELECT * FROM wiki_pages WHERE to_tsvector(slug) @@ to_tsquery(?)", q .. ':*'
+        --  select distinct on (wiki_page_id) r.* wiki_page_id from revisions r, wiki_pages w where r.wiki_page_id = w.id order by wiki_page_id, r.updated_at desc
         @titlematches = res['resultset']
         if #@titlematches == 1
             redirect_to: @url_for("wikipage", slug:@titlematches[1].slug)
@@ -106,7 +111,6 @@ class extends lapis.Application
         url = '/' .. fileurl
 
         res = "<script type='text/javascript'>window.parent.CKEDITOR.tools.callFunction(#{CKEditorFuncNum}, '#{url}', '#{message}');</script>"
-        print res
         @write res
     }
 

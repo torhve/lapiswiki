@@ -37,10 +37,11 @@ CKEDITOR.editorConfig = function( config ) {
 	config.removeDialogTabs = 'image:advanced;link:advanced';
 
     // Extra plugins
-    config.extraPlugins = 'imagepaste,ajaxsave,maximize,insertpre';
+    config.extraPlugins = 'imagepaste,ajaxsave,maximize,insertpre,syntaxhighlight';
 
     config.filebrowserBrowseUrl = '/browser/';
 
     config.filebrowserImageUploadUrl = '/upload/?type=Images';
     config.filebrowserUploadUrl = '/upload/';
+
 };
