@@ -54,7 +54,7 @@ CKEDITOR.plugins.add('ajaxsave',  {
         editor.ui.addButton('ajaxsave', {
             label: 'Save text',
             command: pluginName,
-            toolbar: 'undo,1',
+            toolbar: 'basicstyles,1',
             icon: this.path+'save.png'
         });
     }

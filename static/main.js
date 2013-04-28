@@ -54,7 +54,6 @@ var editor = CKEDITOR.inline( 'editable', {
     }
 } );
 
-*/
 var periodicData = ( function(){
     var data, oldData = editor.getData();
 
@@ -78,3 +77,4 @@ var periodicData = ( function(){
         setTimeout( periodicData, 1000 );
     };
 })();
+*/

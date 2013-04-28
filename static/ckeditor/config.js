@@ -14,7 +14,7 @@ CKEDITOR.editorConfig = function( config ) {
 		{ name: 'paragraph',   groups: [ 'list', 'indent', 'blocks', 'align', 'bidi' ] },
 		{ name: 'styles' },
 		{ name: 'colors' },
-		{ name: 'about' },
+		{ name: 'Maximize' },
 		'/',
 		{ name: 'clipboard',   groups: [ 'clipboard', 'undo' ] },
 		{ name: 'editing',     groups: [ 'find', 'selection', 'spellchecker' ] },
@@ -34,10 +34,10 @@ CKEDITOR.editorConfig = function( config ) {
 	config.format_tags = 'p;h1;h2;h3;pre';
 
 	// Make dialogs simpler.
-	//config.removeDialogTabs = 'image:advanced;link:advanced';
+	config.removeDialogTabs = 'image:advanced;link:advanced';
 
     // Extra plugins
-    config.extraPlugins = 'imagepaste,ajaxsave,insertpre';
+    config.extraPlugins = 'imagepaste,ajaxsave,maximize,insertpre';
 
     config.filebrowserBrowseUrl = '/browser/';
 
