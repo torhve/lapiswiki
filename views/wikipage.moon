@@ -14,23 +14,26 @@ class New extends require "widgets.base"
                   i class:'foundicon-clock'
                   text 'Revisions'
           raw '<hr>'
+          raw [[
+              <script>
+              $('#edit').click(function(evt) {
+                  evt.preventDefault();
+                  $('#wikipage').attr('contenteditable', 'true');
+                  var instance = CKEDITOR.inline( 'wikipage' );
+
+
+              });
+              </script>
+            ]]
 
           @render_errors!
 
           unless next @revisions
-              div contenteditable: 'true', class: "empty_message", 'Just start editing this content by clicking it. Easy peasy!'
+              div id:'wikipage', class: "empty_message", ->
+                  text "Click the Edit button to begin. Easy peasy! Don't panic!"
               return
 
-
+            
           for revision in *@revisions[1,1]
               div id:'wikipage',  ->
                 raw revision.content
-          raw [[
-              <script>
-              $('#edit').click(function(evt) {
-                  console.log(evt);
-                   $('#wikipage').attr('contenteditable', 'true');
-                   CKEDITOR.inline( 'wikipage' );
-              });
-              </script>
-            ]]

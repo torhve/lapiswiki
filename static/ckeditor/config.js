@@ -11,6 +11,8 @@ CKEDITOR.editorConfig = function( config ) {
     // Needed for silly toc plugin
     config.allowedContent = true;
 
+    config.startupFocus = true;
+
 	// The toolbar groups arrangement, optimized for two toolbar rows.
 	config.toolbarGroups = [
 		{ name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },

@@ -34,6 +34,12 @@ CKEDITOR.on( 'instanceCreated', function( event ) {
         });
     }
 });
+
+CKEDITOR.on( 'instanceReady', function( event ) {
+    editor = event.editor;
+    editor.focus();
+});
+
 /*
 CKEDITOR.on( 'instanceReady', function( event ) {
     editor = event.editor;
