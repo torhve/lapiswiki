@@ -35,7 +35,9 @@ class Layout extends Widget
                     li class:"Home", ->
                       a href: @url_for("index"), "Home"
                     li class:"All", ->
-                      a href: @url_for("all"), "All"
+                      a href: @url_for("all"), "All pages"
+                    li class:"recent", ->
+                      a href: @url_for("recent"), "Recent changes"
             section class: "top-bar-section", ->
                 ul class:"right", ->
                     li class:"has-form", ->

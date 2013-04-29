@@ -36,6 +36,12 @@ class extends lapis.Application
         @pages = WikiPages\select "order by slug asc"
         render: true
 
+    [recent: "/recent/"]: =>
+        @page_title = "Recent changes"
+        res = db.query 'select distinct on (wiki_page_id) r.*, w.* wiki_page_id from revisions r, wiki_pages w where r.wiki_page_id = w.id order by wiki_page_id, r.updated_at desc'
+        @pages = res['resultset']
+        render: true
+
     [wikipage: "/wiki/:slug"]: respond_to {
       GET: =>
         @page = assert WikiPages\find(slug: @params.slug), 'No page found'
