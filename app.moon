@@ -38,7 +38,7 @@ class extends lapis.Application
 
     [recent: "/recent/"]: =>
         @page_title = "Recent changes"
-        res = db.query 'select distinct on (wiki_page_id) r.*, w.* wiki_page_id from revisions r, wiki_pages w where r.wiki_page_id = w.id order by wiki_page_id, r.updated_at desc'
+        res = db.query 'select * from (select distinct on (r.wiki_page_id) r.*, w.id, w.slug from revisions r, wiki_pages w where r.wiki_page_id = w.id order by r.wiki_page_id, updated_at) as pages order by updated_at desc'
         @pages = res['resultset']
         render: true
 
@@ -97,8 +97,14 @@ class extends lapis.Application
         {:q} = @params
         @page_title = 'Search for ' .. q
         @query = q
-        res = db.query "SELECT * FROM wiki_pages WHERE to_tsvector(slug) @@ to_tsquery(?)", q .. ':*'
+        pq = q .. ':*'
+        --res = db.query "SELECT * FROM wiki_pages WHERE to_tsvector(slug) @@ to_tsquery(?)", q .. ':*'
         --  select distinct on (wiki_page_id) r.* wiki_page_id from revisions r, wiki_pages w where r.wiki_page_id = w.id order by wiki_page_id, r.updated_at desc
+        res = db.query [[select * from (select distinct on (r.wiki_page_id) r.*, w.id, w.slug from revisions r, wiki_pages w where r.wiki_page_id = w.id order by r.wiki_page_id, updated_at) as pages 
+            WHERE 
+                to_tsvector(slug) @@ to_tsquery(?) 
+            OR
+                to_tsvector(content) @@ to_tsquery(?)]], pq, pq
         @titlematches = res['resultset']
         if #@titlematches == 1
             redirect_to: @url_for("wikipage", slug:@titlematches[1].slug)
