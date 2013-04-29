@@ -42,7 +42,10 @@ class extends lapis.Application
         @page_description = @page.slug
         @page_title = @page.slug
 
-        @revisions = assert_error Revisions\select "where wiki_page_id = ? order by updated_at desc", @page.id
+        if @params['revision']
+            @revisions = assert_error Revisions\select "where wiki_page_id = ? and id = ?", @page.id, @params['revision']
+        else
+            @revisions = assert_error Revisions\select "where wiki_page_id = ? order by updated_at desc", @page.id
 
         render: true
 
@@ -55,6 +58,14 @@ class extends lapis.Application
         ip = ngx.var.remote_addr
         revision = assert_error Revisions\create @page, content, ip
     }
+    [revisions: "/wiki/:slug/revisions/"]:  =>
+        @page = assert WikiPages\find(slug: @params.slug), 'No page found'
+        @page_description = @page.slug
+        @page_title = @page.slug
+
+        @revisions = assert_error Revisions\select "where wiki_page_id = ? order by updated_at desc", @page.id
+
+        render: true
 
     [new: "/new"]: respond_to {
       before: =>

@@ -37,5 +37,8 @@ pre, code {
 code, pre {
     font-family: Inconsolata,monospace;
 }
+.title {
+    text-transform: capitalize;
+}
 
 
