@@ -12,4 +12,4 @@ class New extends require "widgets.base"
             div class: "row", ->
             input type: "text", name: "slug", id: "slug_field"
             div ->
-                input type: "submit", class: "button primary"
+                input type: "submit", class: "button primary", value:'Create document'

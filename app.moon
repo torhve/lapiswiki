@@ -93,7 +93,10 @@ class extends lapis.Application
         redirect_to: @url_for("wikipage", slug: slug)
     }
 
-    [search: "/search"]: capture_errors =>
+    [search: "/search"]: =>
+        assert_valid @params, {
+            { 'q', exists: true, min_length: 1, max_length: 75 }
+        }
         {:q} = @params
         @page_title = 'Search for ' .. q
         @query = q
@@ -105,10 +108,14 @@ class extends lapis.Application
                 to_tsvector(slug) @@ to_tsquery(?) 
             OR
                 to_tsvector(content) @@ to_tsquery(?)]], pq, pq
-        @titlematches = res['resultset']
-        if #@titlematches == 1
-            redirect_to: @url_for("wikipage", slug:@titlematches[1].slug)
+        if res
+            @titlematches = res['resultset']
+            unless @titlematches
+                @titlematches = {}
+            if #@titlematches == 1
+                redirect_to: @url_for("wikipage", slug:@titlematches[1].slug)
         else
+            @titlematches = {}
             render: true
 
     [upload: "/upload/"]: respond_to {
