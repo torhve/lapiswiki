@@ -41,4 +41,7 @@ code, pre {
     text-transform: capitalize;
 }
 
-
+#toc {
+    /* Override silly foundation margin */
+    margin-left: 0;
+}

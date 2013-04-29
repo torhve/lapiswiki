@@ -16,6 +16,7 @@ class Layout extends Widget
 
         link rel: "stylesheet", href: "/static/css/normalize.css"
         link rel: "stylesheet", href: "/static/css/foundation.min.css"
+        link rel: "stylesheet", href: "/static/foundation_icons_general/stylesheets/general_foundicons.css"
         link rel: "stylesheet", href: "/static/style.css"
         script type: "text/javascript", src: "//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"
         script type: "text/javascript", src: "/static/ckeditor/ckeditor.js"
@@ -33,11 +34,17 @@ class Layout extends Widget
                 ul class:"left", ->
                     li class:"divider"
                     li class:"Home", ->
-                      a href: @url_for("index"), "Home"
+                      a href: @url_for("index"), ->
+                          text "Home"
+                    li class:"divider"
                     li class:"All", ->
-                      a href: @url_for("all"), "All pages"
+                      a href: @url_for("all"), ->
+                          text "All pages"
+                    li class:"divider"
                     li class:"recent", ->
-                      a href: @url_for("recent"), "Recent changes"
+                      a href: @url_for("recent"), ->
+                          text "Recent changes"
+                    li class:"divider"
             section class: "top-bar-section", ->
                 ul class:"right", ->
                     li class:"has-form", ->
@@ -50,7 +57,9 @@ class Layout extends Widget
 
                     li class:"divider"
                     li class:"", ->
-                        a class: "button", href: @url_for"new", 'New'
+                        a class: "button", href: @url_for"new", ->
+                            i class:'foundicon-add-doc'
+                            text 'New'
                     li class:"divider"
 
           div class: "row content", ->

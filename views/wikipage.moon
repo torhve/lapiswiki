@@ -6,8 +6,13 @@ class New extends require "widgets.base"
           h2 class:"left title", @page.slug
           span class:"right", @page.updated_at
           raw '<br>'
-          a class:"right button tiny", href:@url_for('revisions', slug:@page.slug),->
-              text 'Revisions'
+          ul class:'right button-group', ->
+              a href:'#', id:'edit', class:"button small alert", ->
+                  i class:'foundicon-edit'
+                  text 'Edit'
+              a class:"button small", href:@url_for('revisions', slug:@page.slug),->
+                  i class:'foundicon-clock'
+                  text 'Revisions'
           raw '<hr>'
 
           @render_errors!
@@ -17,7 +22,15 @@ class New extends require "widgets.base"
               return
 
 
-          for revision in *@revisions
-              div contenteditable: 'true', ->
+          for revision in *@revisions[1,1]
+              div id:'wikipage',  ->
                 raw revision.content
-              return
+          raw [[
+              <script>
+              $('#edit').click(function(evt) {
+                  console.log(evt);
+                   $('#wikipage').attr('contenteditable', 'true');
+                   CKEDITOR.inline( 'wikipage' );
+              });
+              </script>
+            ]]

@@ -8,6 +8,9 @@ CKEDITOR.editorConfig = function( config ) {
 	// For the complete reference:
 	// http://docs.ckeditor.com/#!/api/CKEDITOR.config
 
+    // Needed for silly toc plugin
+    config.allowedContent = true;
+
 	// The toolbar groups arrangement, optimized for two toolbar rows.
 	config.toolbarGroups = [
 		{ name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
@@ -37,7 +40,7 @@ CKEDITOR.editorConfig = function( config ) {
 	config.removeDialogTabs = 'image:advanced;link:advanced';
 
     // Extra plugins
-    config.extraPlugins = 'imagepaste,ajaxsave,maximize,syntaxhighlight';
+    config.extraPlugins = 'imagepaste,ajaxsave,maximize,syntaxhighlight,toc';
 
     config.filebrowserBrowseUrl = '/browser/';
 

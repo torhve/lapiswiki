@@ -4,6 +4,7 @@
 // require less features.
 // fugly global XXX
 var editor;
+CKEDITOR.disableAutoInline = true;
 // The "instanceCreated" event is fired for every editor instance created.
 CKEDITOR.on( 'instanceCreated', function( event ) {
     editor = event.editor;
@@ -45,7 +46,6 @@ CKEDITOR.on( 'blur', function( event ) {
     console.log('data', data);
 });
 
-CKEDITOR.disableAutoInline = true;
 var editor = CKEDITOR.inline( 'editable', {
     on: {
         instanceReady: function() {
