@@ -27,9 +27,7 @@ class extends lapis.Application
     layout: require "views.layout"
 
     [index: "/"]: =>
-        @page_description = "Welcome To LapisWiki"
-        @page_title = "Welcome to LapisWiki"
-        render: true
+        redirect_to: @url_for("wikipage", slug: 'home')
 
     [all: "/all/"]: =>
         @page_title = "All wiki pages"
