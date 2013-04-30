@@ -5,13 +5,13 @@ csrf = require "lapis.csrf"
 console = require "lapis.console"
 html = require "lapis.html"
 io = require "io"
-os = require "os"
 
 import respond_to, capture_errors, assert_error, yield_error from require "lapis.application"
 import validate, assert_valid from require "lapis.validate"
 import escape_pattern, trim_filter from require "lapis.util"
+import split from require "moonscript.util"
 
-import WikiPages, Revisions from require "models"
+import WikiPages, Revisions, Tags, TagsPageRelation from require "models"
 
 secure_filename = (filename) ->
     filename = string.gsub(filename, '/', '')
@@ -34,6 +34,22 @@ class extends lapis.Application
         @pages = WikiPages\select "order by slug asc"
         render: true
 
+    [alltags: "/tag/"]: =>
+        @page_title = "All tags"
+        @tags = Tags\select "order by name asc"
+        render: true
+
+    [tag: "/tag/:name"]: =>
+        @tag = @params.name
+        @page_title = "All pages for tag"
+        @pages = WikiPages\select [[
+            INNER JOIN tags_page_relation r 
+                ON (r.wiki_page_id = wiki_pages.id)
+            INNER JOIN tags t
+                ON (t.id = r.tags_id)
+        WHERE name = ? order by slug ASC]], @tag
+        render: true
+
     [recent: "/recent/"]: =>
         @page_title = "Recent changes"
         res = db.query 'select * from (select distinct on (r.wiki_page_id) r.*, w.id, w.slug from revisions r, wiki_pages w where r.wiki_page_id = w.id order by r.wiki_page_id, updated_at) as pages order by updated_at desc'
@@ -50,6 +66,12 @@ class extends lapis.Application
             @revisions = assert_error Revisions\select "where wiki_page_id = ? and id = ?", @page.id, @params['revision']
         else
             @revisions = assert_error Revisions\select "where wiki_page_id = ? order by updated_at desc", @page.id
+
+        @tags = assert_error Tags\select [[
+            INNER JOIN tags_page_relation r
+                ON (tags.id = r.tags_id)
+            WHERE wiki_page_id = ?
+            ]], @page.id
 
         render: true
 
@@ -71,6 +93,38 @@ class extends lapis.Application
 
         render: true
 
+    [tags: "/wiki/:slug/tags/"]: respond_to {
+        before: =>
+            @page = assert WikiPages\find(slug: @params.slug), 'No page found'
+            @page_description = @page.slug
+            @page_title = @page.slug
+        GET: =>
+
+            @tags = assert_error Tags\select [[
+                INNER JOIN tags_page_relation r
+                    ON (tags.id = r.tags_id)
+                WHERE wiki_page_id = ?
+                ]], @page.id
+
+            render: true
+        POST: =>
+            name = @params.name
+            --- XXX better postgresql unique check ?
+            --- 
+            @tag = Tags\find name: name
+            unless @tag
+                @tag = Tags\create name
+            @relation = TagsPageRelation\create @page.id, @tag.id
+            -- XXX DRY how ??
+            @tags = assert_error Tags\select [[
+                INNER JOIN tags_page_relation r
+                    ON (tags.id = r.tags_id)
+                WHERE wiki_page_id = ?
+                ]], @page.id
+
+            render: true
+        }
+
     [new: "/new"]: respond_to {
       before: =>
         @page_title = "Create document"
@@ -85,9 +139,15 @@ class extends lapis.Application
         assert_valid @params, {
             { 'slug', exists: true, min_length: 3, max_length: 75 }
         }
-        {:slug } = @params
+        {:slug, :tags } = @params
+
+
+        tags = split tags ' '
+        print cjson.encode tags
+
         slug = slugify slug
         page = assert_error WikiPages\create slug
+
         redirect_to: @url_for("wikipage", slug: slug)
     }
 
@@ -142,10 +202,10 @@ class extends lapis.Application
         @write res
     }
 
-    --"/db/make": =>
-    --    schema = require "schema"
-    --    schema.make_schema!
-    --    json: { status: "ok" }
+    "/db/make": =>
+        schema = require "schema"
+        schema.make_schema!
+        json: { status: "ok" }
 
     --"/db/nuke": =>
     --    schema = require "schema"

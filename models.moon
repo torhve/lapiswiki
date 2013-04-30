@@ -30,6 +30,20 @@ class Revisions extends Model
       creator_ip: ip
     }
 
+class Tags extends Model
+  @create: (name) =>
+
+    Model.create @, {
+      name: name\lower!
+    }
+
+class TagsPageRelation extends Model
+  @create: (wiki_page_id, tags_id) =>
+
+    Model.create @, {
+        wiki_page_id: wiki_page_id
+        tags_id: tags_id
+    }
 {
-      :WikiPages, :Revisions
+      :WikiPages, :Revisions, :Tags, :TagsPageRelation
 }

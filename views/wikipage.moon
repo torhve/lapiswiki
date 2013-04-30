@@ -1,6 +1,6 @@
 import Widget from require "lapis.html"
 
-class New extends require "widgets.base"
+class WikiPage extends require "widgets.base"
     content: =>
         div class: "body", ->
           h2 class:"left title", @page.slug
@@ -9,10 +9,39 @@ class New extends require "widgets.base"
           ul class:'right button-group', ->
               a href:'#', id:'edit', class:"button small alert", ->
                   i class:'foundicon-edit'
+                  text ' '
                   text 'Edit'
+              a class:"button small", href:@url_for('tags', slug:@page.slug),->
+                  i class:'foundicon-flag'
+                  text ' '
+                  text 'Edit tags'
               a class:"button small", href:@url_for('revisions', slug:@page.slug),->
                   i class:'foundicon-clock'
+                  text ' '
                   text 'Revisions'
+
+
+          raw '<br style="clear: both;">'
+          if #@tags > 0
+              h6, 'Tags'
+          ul class:'inline-list', ->
+              for tag in *@tags
+                  li ->
+                    a href:@url_for('tag', name:tag.name), ->
+                        i class:'foundicon-flag', ' '
+                        text tag.name
+          raw '<hr>'
+
+          @render_errors!
+
+          unless next @revisions
+              div id:'wikipage', class: "empty_message", ->
+                  text "Click the Edit button to begin. Easy peasy! Don't panic!"
+          else
+              for revision in *@revisions[1,1]
+                  div id:'wikipage',  ->
+                    raw revision.content
+          
           raw '<hr>'
           raw [[
               <script>
@@ -25,15 +54,3 @@ class New extends require "widgets.base"
               });
               </script>
             ]]
-
-          @render_errors!
-
-          unless next @revisions
-              div id:'wikipage', class: "empty_message", ->
-                  text "Click the Edit button to begin. Easy peasy! Don't panic!"
-              return
-
-            
-          for revision in *@revisions[1,1]
-              div id:'wikipage',  ->
-                raw revision.content

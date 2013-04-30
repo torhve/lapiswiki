@@ -41,6 +41,10 @@ class Layout extends Widget
                       a href: @url_for("all"), ->
                           text "All pages"
                     li class:"divider"
+                    li class:"Tags", ->
+                      a href: @url_for("alltags"), ->
+                          text "All Tags"
+                    li class:"divider"
                     li class:"recent", ->
                       a href: @url_for("recent"), ->
                           text "Recent changes"
