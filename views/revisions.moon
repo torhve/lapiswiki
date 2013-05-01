@@ -14,21 +14,28 @@ class New extends require "widgets.base"
               return
 
           form ->
-              ul ->
-              for revision in *@revisions
-                  li ->
-                    input type:'checkbox', name:'selected', id:revision.id
-                    raw ' '
-                    a href:@url_for('wikipage', slug: @page.slug)..'?revision='..revision.id, ->
-                        raw @page.slug
-                        raw ' - '
-                        raw revision.id
-                    raw ' &middot; '
-                    raw revision.created_at
-                    raw ' &middot; '
-                    raw revision.creator_ip
-                    raw ' &middot; '
-                    raw #revision.content
-                    raw ' characters '
+              element 'table', ->
+                th ''
+                th 'Revision'
+                th 'When'
+                th 'Who'
+                th 'Size'
+                  
+                for revision in *@revisions
+                    tr ->
+                      td ->
+                        input type:'checkbox', name:'selected', id:revision.id
+                      td ->
+                        a href:@url_for('wikipage', slug: @page.slug)..'?revision='..revision.id, ->
+                            raw @page.slug
+                            raw ' - '
+                            raw revision.id
+                      td ->
+                        raw revision.created_at
+                      td ->
+                        raw revision.creator_ip
+                      td ->
+                        raw #revision.content
+                        raw ' characters '
               input class:'button small', type:'submit', value:'Compare revisions', onclick:'alert("Not yet implemented")'
           

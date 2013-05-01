@@ -142,8 +142,7 @@ class extends lapis.Application
         {:slug, :tags } = @params
 
 
-        tags = split tags ' '
-        print cjson.encode tags
+        --tags = split tags ' '
 
         slug = slugify slug
         page = assert_error WikiPages\create slug
