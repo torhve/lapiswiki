@@ -11,6 +11,10 @@ class WikiPage extends require "widgets.base"
                   i class:'foundicon-edit'
                   text ' '
                   text 'Edit'
+              a href:'#', id:'save', style:"display:none;", class:"button small alert", ->
+                  i class:'foundicon-edit'
+                  text ' '
+                  text 'Save'
               a class:"button small", href:@url_for('tags', slug:@page.slug),->
                   i class:'foundicon-flag'
                   text ' '
@@ -47,10 +51,17 @@ class WikiPage extends require "widgets.base"
               <script>
               $('#edit').click(function(evt) {
                   evt.preventDefault();
+                  $('#edit').hide();
+                  $('#save').show();
                   $('#wikipage').attr('contenteditable', 'true');
                   var instance = CKEDITOR.inline( 'wikipage' );
-
-
+              });
+              $('#save').click(function(evt) {
+                  evt.preventDefault();
+                  $('#wikipage').attr('contenteditable', 'false');
+                  CKEDITOR.instances['wikipage'].commands.ajaxsave.exec();
+                  $('#save').hide();
+                  $('#edit').show();
               });
               </script>
             ]]
