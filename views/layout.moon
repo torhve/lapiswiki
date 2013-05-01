@@ -11,8 +11,8 @@ class Layout extends Widget
           else
             text "LapisWiki"
 
-        if @page_description
-          meta name: "description", content: @page_description
+        if @description
+          meta name: "description", content: @description
 
         link rel: "stylesheet", href: "/static/css/normalize.css"
         link rel: "stylesheet", href: "/static/css/foundation.min.css"

@@ -3,7 +3,7 @@ import Widget from require "lapis.html"
 class New extends require "widgets.base"
     content: =>
         div class: "body", ->
-          h2 @page_title
+          h2 @title
           @render_errors!
 
           form method: "POST", action: @url_for("new"), ->

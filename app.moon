@@ -30,18 +30,18 @@ class extends lapis.Application
         redirect_to: @url_for("wikipage", slug: 'home')
 
     [all: "/all/"]: =>
-        @page_title = "All wiki pages"
+        @title = "All wiki pages"
         @pages = WikiPages\select "order by slug asc"
         render: true
 
     [alltags: "/tag/"]: =>
-        @page_title = "All tags"
+        @title = "All tags"
         @tags = Tags\select "order by name asc"
         render: true
 
     [tag: "/tag/:name"]: =>
         @tag = @params.name
-        @page_title = "All pages for tag"
+        @title = "All pages for tag"
         @pages = WikiPages\select [[
             INNER JOIN tags_page_relation r 
                 ON (r.wiki_page_id = wiki_pages.id)
@@ -51,7 +51,7 @@ class extends lapis.Application
         render: true
 
     [recent: "/recent/"]: =>
-        @page_title = "Recent changes"
+        @title = "Recent changes"
         res = db.query 'select * from (select distinct on (r.wiki_page_id) r.*, w.id, w.slug from revisions r, wiki_pages w where r.wiki_page_id = w.id order by r.wiki_page_id, updated_at) as pages order by updated_at desc'
         @pages = res['resultset']
         render: true
@@ -60,7 +60,7 @@ class extends lapis.Application
       GET: =>
         @page = assert WikiPages\find(slug: @params.slug), 'No page found'
         @page_description = @page.slug
-        @page_title = @page.slug
+        @title = @page.slug
 
         if @params['revision']
             @revisions = assert_error Revisions\select "where wiki_page_id = ? and id = ?", @page.id, @params['revision']
@@ -87,7 +87,7 @@ class extends lapis.Application
     [revisions: "/wiki/:slug/revisions/"]:  =>
         @page = assert WikiPages\find(slug: @params.slug), 'No page found'
         @page_description = @page.slug
-        @page_title = @page.slug
+        @title = @page.slug
 
         @revisions = assert_error Revisions\select "where wiki_page_id = ? order by updated_at desc", @page.id
 
@@ -97,7 +97,7 @@ class extends lapis.Application
         before: =>
             @page = assert WikiPages\find(slug: @params.slug), 'No page found'
             @page_description = @page.slug
-            @page_title = @page.slug
+            @title = @page.slug
         GET: =>
 
             @tags = assert_error Tags\select [[
@@ -127,7 +127,7 @@ class extends lapis.Application
 
     [new: "/new"]: respond_to {
       before: =>
-        @page_title = "Create document"
+        @title = "Create document"
         @page_description = "Create new document"
 
       GET: =>
@@ -155,7 +155,7 @@ class extends lapis.Application
             { 'q', exists: true, min_length: 1, max_length: 75 }
         }
         {:q} = @params
-        @page_title = 'Search for ' .. q
+        @title = 'Search for ' .. q
         @query = q
         pq = q .. ':*'
         --res = db.query "SELECT * FROM wiki_pages WHERE to_tsvector(slug) @@ to_tsquery(?)", q .. ':*'
