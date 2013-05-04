@@ -12,4 +12,6 @@ class New extends require "widgets.base"
 
           for tag in *@tags
               div ->
-                  a class:'title', href:@url_for("tag", name: tag.name), tag.name
+                  a class:'title', href:@url_for("tag", name: tag.name), ->
+                    i class:'foundicon-flag', ' '
+                    text tag.name

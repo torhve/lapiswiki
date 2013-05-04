@@ -15,4 +15,6 @@ class New extends require "widgets.base"
 
           for page in *@pages
             div ->
-                a href:@url_for("wikipage", slug: page.slug), page.slug
+                a href:@url_for("wikipage", slug: page.slug), ->
+                  i class:'foundicon-page', ' '
+                  text page.slug
