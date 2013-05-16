@@ -201,10 +201,10 @@ class extends lapis.Application
         @write res
     }
 
-    "/db/make": =>
-        schema = require "schema"
-        schema.make_schema!
-        json: { status: "ok" }
+    -- "/db/make": =>
+    --     schema = require "schema"
+    --     schema.make_schema!
+    --     json: { status: "ok" }
 
     --"/db/nuke": =>
     --    schema = require "schema"

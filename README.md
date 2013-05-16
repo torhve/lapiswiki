@@ -19,3 +19,13 @@ Goals
 
 *    Lower the threshold for user contribution to a wiki
 
+
+## Installation
+
+
+* Openresty
+* Lapis
+     sudo luarocks install --server=http://rocks.moonscript.org/manifests/leafo lapis 
+* Lua date
+    sudo luarocks install https://raw.github.com/leafo/lua-date/master/date-dev-1.rockspec
+

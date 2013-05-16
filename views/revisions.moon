@@ -1,4 +1,6 @@
 import Widget from require "lapis.html"
+import time_ago_in_words from require "lapis.util"
+
 
 class New extends require "widgets.base"
     content: =>
@@ -18,6 +20,7 @@ class New extends require "widgets.base"
                 th ''
                 th 'Revision'
                 th 'When'
+                th 'Time'
                 th 'Who'
                 th 'Size'
                   
@@ -30,6 +33,8 @@ class New extends require "widgets.base"
                             raw @page.slug
                             raw ' - '
                             raw revision.id
+                      td ->
+                        raw time_ago_in_words revision.created_at
                       td ->
                         raw revision.created_at
                       td ->

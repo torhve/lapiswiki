@@ -70,21 +70,21 @@ class Layout extends Widget
               div class: "large-12 columns", ->
                 @content_for "inner"
 
-    div class: "prefooter", ->
-      div class: "row", ->
-          div class: "large-12 columns", ->
-              div class: "right", ->
-                text ""
-              raw "&nbsp;"
-    div class: "footer", ->
-      div class: "row", ->
-          div class: "large-12 columns", ->
-              div class: "right", ->
-                text "by "
-                a href: "http://twitter.com/thveem", "@thveem"
-                raw " &middot; "
-                a href: "http://github.com/torhve/lapiswiki", "Source"
+          div class: "prefooter", ->
+            div class: "row", ->
+                div class: "large-12 columns", ->
+                    div class: "right", ->
+                      text ""
+                    raw "&nbsp;"
+          div class: "footer", ->
+            div class: "row", ->
+                div class: "large-12 columns", ->
+                    div class: "right", ->
+                      text "by "
+                      a href: "http://twitter.com/thveem", "@thveem"
+                      raw " &middot; "
+                      a href: "http://github.com/torhve/lapiswiki", "Source"
 
-              a href: @url_for("index"), "Home"
-              raw " &middot; "
+                    a href: @url_for("index"), "Home"
+                    raw " &middot; "
 
