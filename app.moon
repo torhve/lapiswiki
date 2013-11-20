@@ -2,7 +2,6 @@ http = require "lapis.nginx.http"
 db = require "lapis.nginx.postgres"
 lapis = require "lapis.init"
 csrf = require "lapis.csrf"
-console = require "lapis.console"
 html = require "lapis.html"
 io = require "io"
 
@@ -211,6 +210,5 @@ class extends lapis.Application
     --    schema.destroy_schema!
     --    json: { status: "ok" }
 
-    "/console": console.make!
 
 
