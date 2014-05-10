@@ -159,20 +159,14 @@ class extends lapis.Application
         pq = q .. ':*'
         --res = db.query "SELECT * FROM wiki_pages WHERE to_tsvector(slug) @@ to_tsquery(?)", q .. ':*'
         --  select distinct on (wiki_page_id) r.* wiki_page_id from revisions r, wiki_pages w where r.wiki_page_id = w.id order by wiki_page_id, r.updated_at desc
-        res = db.query [[select * from (select distinct on (r.wiki_page_id) r.*, w.id, w.slug from revisions r, wiki_pages w where r.wiki_page_id = w.id order by r.wiki_page_id, updated_at) as pages 
+        @titlematches = db.select [[* from (select distinct on (r.wiki_page_id) r.*, w.id, w.slug from revisions r, wiki_pages w where r.wiki_page_id = w.id order by r.wiki_page_id, updated_at) as pages 
             WHERE 
                 to_tsvector(slug) @@ to_tsquery(?) 
             OR
                 to_tsvector(content) @@ to_tsquery(?)]], pq, pq
-        if res
-            @titlematches = res['resultset']
-            unless @titlematches
-                @titlematches = {}
-            if #@titlematches == 1
-                redirect_to: @url_for("wikipage", slug:@titlematches[1].slug)
-        else
-            @titlematches = {}
-            render: true
+        if #@titlematches == 1
+          redirect_to: @url_for("wikipage", slug:@titlematches[1].slug)
+        render: true
 
     [upload: "/upload/"]: respond_to {
       GET: =>
