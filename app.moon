@@ -51,8 +51,8 @@ class extends lapis.Application
 
     [recent: "/recent/"]: =>
         @title = "Recent changes"
-        res = db.query 'select * from (select distinct on (r.wiki_page_id) r.*, w.id, w.slug from revisions r, wiki_pages w where r.wiki_page_id = w.id order by r.wiki_page_id, updated_at) as pages order by updated_at desc'
-        @pages = res['resultset']
+        res = db.select '* FROM (select distinct on (r.wiki_page_id) r.*, w.id, w.slug from revisions r, wiki_pages w where r.wiki_page_id = w.id order by r.wiki_page_id, updated_at) as pages order by updated_at desc LIMIT 50'
+        @pages = res
         render: true
 
     [wikipage: "/wiki/:slug"]: respond_to {

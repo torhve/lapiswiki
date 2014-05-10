@@ -6,11 +6,12 @@ class New extends require "widgets.base"
     div class: "body", ->
       h2 "Recent changes"
 
+
       unless next @pages
         div class: "empty_message", 'No wiki pages found!'
         return
 
-      
+
       element "table", ->
         th 'Document'
         th 'When'
