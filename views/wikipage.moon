@@ -4,7 +4,7 @@ class WikiPage extends require "widgets.base"
     content: =>
         div class: "body", ->
           h2 class:"left title", @page.slug
-          if @revisions
+          if @revisions and @revisions[1]
             span class:"right label", "Changed #{@revisions[1].updated_at} "
           else
             span class:"right", " Created #{@page.updated_at} "
